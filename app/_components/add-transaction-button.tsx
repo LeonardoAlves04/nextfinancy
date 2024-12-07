@@ -12,7 +12,7 @@ import { addTransaction } from "../_actions/add-transaction";
 import { useState } from "react";
 import UpsertTransactionDialog from "./upsert-transaction-dialog";
 import { ArrowDownUpIcon } from "lucide-react";
-import { Button } from "react-day-picker";
+import { Button } from "./ui/button";
 
 const AddTransactionButton = () => {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
@@ -30,7 +30,6 @@ const AddTransactionButton = () => {
         isOpen={dialogIsOpen}
         setIsOpen={setDialogIsOpen}
       />
-      ;
     </>
   );
 };
