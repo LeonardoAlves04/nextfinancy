@@ -40,12 +40,12 @@ import {
 } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addTransaction } from "../_actions/add-transaction";
 
 interface UpsertTransactionDialogProps {
   isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
   defaultValues?: FormSchema;
+  transactionId?: string;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
 const formSchema = z.object({
@@ -69,10 +69,11 @@ const formSchema = z.object({
 
 type FormSchema = z.infer<typeof formSchema>;
 
-const UpsertTransactionDialog = ({
+const UpsertTransactionDialogProps = ({
   isOpen,
   setIsOpen,
   defaultValues,
+  transactionId,
 }: UpsertTransactionDialogProps) => {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -88,13 +89,15 @@ const UpsertTransactionDialog = ({
 
   const onSubmit = async (data: FormSchema) => {
     try {
-      await addTransaction(data);
+      await upsertTransaction({ ...data, id: transactionId });
       setIsOpen(false);
       form.reset();
     } catch (error) {
       console.log(error);
     }
   };
+
+  const isUpdate = Boolean(transactionId);
 
   return (
     <Dialog
@@ -109,7 +112,9 @@ const UpsertTransactionDialog = ({
       <DialogTrigger asChild></DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Adicionar transação</DialogTitle>
+          <DialogTitle>
+            {isUpdate ? "Atualizar" : "Criar"} transação
+          </DialogTitle>
           <DialogDescription>Insira as informações abaixo:</DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -253,7 +258,9 @@ const UpsertTransactionDialog = ({
                   Cancelar
                 </Button>
               </DialogClose>
-              <Button type="submit">Adicionar</Button>
+              <Button type="submit">
+                {isUpdate ? "Atualizar" : "Adicionar"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>
@@ -262,4 +269,31 @@ const UpsertTransactionDialog = ({
   );
 };
 
-export default UpsertTransactionDialog;
+export default UpsertTransactionDialogProps;
+function upsertTransaction(arg0: {
+  id: string | undefined;
+  name: string;
+  type: "DEPOSIT" | "EXPENSE" | "INVESTIMENT";
+  amount: number;
+  date: Date;
+  category:
+    | "OTHER"
+    | "HOUSING"
+    | "TRANSPORTATION"
+    | "FOOD"
+    | "ENTERTAINMENT"
+    | "HEALTH"
+    | "UTILITY"
+    | "SALARY"
+    | "EDUCATION";
+  paymentMethod:
+    | "BANK_TRANSFER"
+    | "BANK_SLIP"
+    | "CASH"
+    | "CREDIT_CARD"
+    | "DEBIT_CARD"
+    | "OTHER"
+    | "PIX";
+}) {
+  throw new Error("Function not implemented.");
+}

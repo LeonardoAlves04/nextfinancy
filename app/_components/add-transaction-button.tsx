@@ -1,20 +1,11 @@
 "use client";
 
-import { z } from "zod";
-import {
-  TransactionCategory,
-  TransactionPaymentMethod,
-  TransactionType,
-} from "@prisma/client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { addTransaction } from "../_actions/add-transaction";
 import { useState } from "react";
-import UpsertTransactionDialog from "./upsert-transaction-dialog";
+import AddTransactionButtonDialog from "./upsert-transaction-dialog";
 import { ArrowDownUpIcon } from "lucide-react";
 import { Button } from "./ui/button";
 
-const AddTransactionButton = () => {
+const AddTransactionButtonButton = () => {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   return (
@@ -26,7 +17,7 @@ const AddTransactionButton = () => {
         Adicionar transação
         <ArrowDownUpIcon />
       </Button>
-      <UpsertTransactionDialog
+      <AddTransactionButtonDialog
         isOpen={dialogIsOpen}
         setIsOpen={setDialogIsOpen}
       />
@@ -34,4 +25,4 @@ const AddTransactionButton = () => {
   );
 };
 
-export default AddTransactionButton;
+export default AddTransactionButtonButton;
