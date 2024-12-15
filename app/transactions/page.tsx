@@ -13,7 +13,10 @@ const TransactionsPage = async () => {
         <AddTransactionButtonButton />
       </div>
 
-      <DataTable columns={transactionColumns} data={transactions} />
+      <DataTable
+        columns={transactionColumns}
+        data={JSON.parse(JSON.stringify(transactions))}
+      />
     </div>
   );
 };
