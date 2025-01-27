@@ -5,7 +5,7 @@ import AddTransactionButtonDialog from "./upsert-transaction-dialog";
 import { ArrowDownUpIcon } from "lucide-react";
 import { Button } from "./ui/button";
 
-const AddTransactionButtonButton = () => {
+const AddTransactionButton = () => {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   return (
@@ -25,4 +25,4 @@ const AddTransactionButtonButton = () => {
   );
 };
 
-export default AddTransactionButtonButton;
+export default AddTransactionButton;
