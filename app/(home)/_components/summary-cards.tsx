@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader } from "@/app/_components/ui/card";
 import {
   PiggyBankIcon,
   TrendingDownIcon,
@@ -6,7 +5,6 @@ import {
   WalletIcon,
 } from "lucide-react";
 import SummaryCard from "./summary-card";
-import { db } from "@/app/_lib/prisma";
 
 interface SummaryCards {
   month: string;

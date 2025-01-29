@@ -1,13 +1,12 @@
-import { TrendingUpIcon } from "lucide-react";
 import { ReactNode } from "react";
 
 interface PercentageItemProps {
-  value: number;
-  title: string;
   icon: ReactNode;
+  title: string;
+  value: number;
 }
 
-const PercentageItem = ({ icon, value, title }: PercentageItemProps) => {
+const PercentageItem = ({ icon, title, value }: PercentageItemProps) => {
   return (
     <div className="flex items-center justify-between">
       {/* ICONE */}
@@ -15,7 +14,7 @@ const PercentageItem = ({ icon, value, title }: PercentageItemProps) => {
         {icon}
         <p className="text-sm text-muted-foreground">{title}</p>
       </div>
-      <p className="text-sm font-bold">{value}</p>
+      <p className="text-sm font-bold">{value}%</p>
     </div>
   );
 };

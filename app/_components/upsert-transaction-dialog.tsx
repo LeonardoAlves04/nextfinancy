@@ -40,6 +40,7 @@ import {
 } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { upsertTransaction } from "../_actions/upsert-transaction";
 
 interface UpsertTransactionDialogProps {
   isOpen: boolean;
@@ -78,7 +79,7 @@ const UpsertTransactionDialogProps = ({
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues ?? {
-      amount: 10,
+      amount: 50,
       category: TransactionCategory.OTHER,
       date: new Date(),
       name: "",
@@ -93,7 +94,7 @@ const UpsertTransactionDialogProps = ({
       setIsOpen(false);
       form.reset();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -270,30 +271,3 @@ const UpsertTransactionDialogProps = ({
 };
 
 export default UpsertTransactionDialogProps;
-function upsertTransaction(arg0: {
-  id: string | undefined;
-  name: string;
-  type: "DEPOSIT" | "EXPENSE" | "INVESTIMENT";
-  amount: number;
-  date: Date;
-  category:
-    | "OTHER"
-    | "HOUSING"
-    | "TRANSPORTATION"
-    | "FOOD"
-    | "ENTERTAINMENT"
-    | "HEALTH"
-    | "UTILITY"
-    | "SALARY"
-    | "EDUCATION";
-  paymentMethod:
-    | "BANK_TRANSFER"
-    | "BANK_SLIP"
-    | "CASH"
-    | "CREDIT_CARD"
-    | "DEBIT_CARD"
-    | "OTHER"
-    | "PIX";
-}) {
-  throw new Error("Function not implemented.");
-}

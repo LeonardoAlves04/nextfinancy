@@ -20,7 +20,7 @@ interface AddTransactionButtonParams {
   date: Date;
 }
 
-export const Transaction = async (params: AddTransactionButtonParams) => {
+export const upsertTransaction = async (params: AddTransactionButtonParams) => {
   upsertTransactionSchema.parse(params);
   const { userId } = await auth();
   if (!userId) {
