@@ -16,6 +16,9 @@ const TransactionsPage = async () => {
     where: {
       userId,
     },
+    orderBy: {
+      date: "desc",
+    },
   });
 
   return (
@@ -27,10 +30,7 @@ const TransactionsPage = async () => {
           <AddTransactionButtonButton />
         </div>
 
-        <DataTable
-          columns={transactionColumns}
-          data={JSON.parse(JSON.stringify(transactions))}
-        />
+        <DataTable columns={transactionColumns} data={transactions} />
       </div>
     </>
   );
