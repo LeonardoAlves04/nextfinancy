@@ -31,11 +31,10 @@ const TimeSelect = () => {
   const handleMonthChange = (month: string) => {
     push(`/?month=${month}`);
   };
-
   return (
     <Select
       onValueChange={(value) => handleMonthChange(value)}
-      defaultValue={month || ""}
+      defaultValue={month ?? ""}
     >
       <SelectTrigger className="w-[150px] rounded-full">
         <SelectValue placeholder="Mês" />

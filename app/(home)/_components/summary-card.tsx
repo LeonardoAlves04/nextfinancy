@@ -16,7 +16,7 @@ const SummaryCard = ({
   size = "small",
 }: SummaryCardProps) => {
   return (
-    <Card className={`${size === "large" ? "bg-white bg-opacity-5" : ""}`}>
+    <Card>
       <CardHeader className="flex-row items-center gap-4">
         {icon}
         <p
@@ -25,7 +25,6 @@ const SummaryCard = ({
           {title}
         </p>
       </CardHeader>
-
       <CardContent className="flex justify-between">
         <p
           className={`font-bold ${size === "small" ? "text-2xl" : "text-4xl"}`}
