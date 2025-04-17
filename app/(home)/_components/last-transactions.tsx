@@ -6,6 +6,7 @@ import { formatCurrency } from "@/app/_utils/currency";
 import { Transaction, TransactionType } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
+import { ptBR } from "date-fns/locale";
 
 interface LastTransactionsProps {
   lastTransactions: Transaction[];
@@ -19,7 +20,7 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
     if (transaction.type === TransactionType.DEPOSIT) {
       return "text-primary";
     }
-    return "text-yellow-400";
+    return "text-white";
   };
   const getAmountPrefix = (transaction: Transaction) => {
     if (transaction.type === TransactionType.DEPOSIT) {

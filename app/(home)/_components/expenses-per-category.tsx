@@ -1,3 +1,4 @@
+"use client";
 import { CardContent, CardHeader, CardTitle } from "@/app/_components/ui/card";
 import { Progress } from "@/app/_components/ui/progress";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
@@ -26,7 +27,7 @@ const ExpensesPerCategory = ({
               </p>
               <p className="text-sm font-bold">{category.percentageOfTotal}</p>
             </div>
-            <Progress value={category.percentageOfTotal}></Progress>
+            <Progress value={Number(category.percentageOfTotal)} />
           </div>
         ))}
       </CardContent>
