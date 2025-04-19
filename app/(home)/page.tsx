@@ -7,19 +7,13 @@ import { isMatch } from "date-fns";
 import { getDashboard } from "../_data/get-dashboard";
 import LastTransactions from "./_components/last-transactions";
 import dynamic from "next/dynamic";
+import TransactionsPieChart from "./_components/transactions-pie-chart";
 
 interface HomeProps {
   searchParams: {
     month: string;
   };
 }
-
-const TransactionsPieChart = dynamic(
-  () => import("./_components/transactions-pie-chart"),
-  {
-    ssr: false,
-  },
-);
 
 const ExpensesPerCategory = dynamic(
   () => import("./_components/expenses-per-category"),
@@ -35,7 +29,7 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
   }
   const monthIsInvalid = !month || !isMatch(month, "MM");
   if (monthIsInvalid) {
-    redirect(`?month=${new Date().getMonth() + 1}`);
+    redirect("?month=01");
   }
   const dashboard = await getDashboard(month);
   return (

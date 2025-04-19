@@ -1,7 +1,16 @@
 "use client";
 
+import { TrendingUp } from "lucide-react";
 import { Pie, PieChart } from "recharts";
-import { Card, CardContent } from "@/app/_components/ui/card";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/app/_components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
@@ -9,9 +18,13 @@ import {
   ChartTooltipContent,
 } from "@/app/_components/ui/chart";
 import { TransactionType } from "@prisma/client";
-import { TransactionPercentagePerType } from "@/app/_data/get-dashboard/types";
-import { PiggyBankIcon, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
-import PercentageItem from "./percentage-item";
+const chartData = [
+  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
+  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
+  { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
+  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
+  { browser: "other", visitors: 90, fill: "var(--color-other)" },
+];
 
 const chartConfig = {
   [TransactionType.INVESTMENT]: {
@@ -23,13 +36,12 @@ const chartConfig = {
     color: "#55B02E",
   },
   [TransactionType.EXPENSE]: {
-    label: "Despesas",
+    label: "Despesa",
     color: "#E93030",
   },
 } satisfies ChartConfig;
 
 interface TransactionsPieChartProps {
-  typesPercentage: TransactionPercentagePerType;
   depositsTotal: number;
   investmentsTotal: number;
   expensesTotal: number;
@@ -39,19 +51,10 @@ const TransactionsPieChart = ({
   depositsTotal,
   investmentsTotal,
   expensesTotal,
-  typesPercentage,
 }: TransactionsPieChartProps) => {
   const chartData = [
-    {
-      type: TransactionType.DEPOSIT,
-      amount: depositsTotal,
-      fill: "#55B02E",
-    },
-    {
-      type: TransactionType.EXPENSE,
-      amount: expensesTotal,
-      fill: "#E93030",
-    },
+    { type: TransactionType.DEPOSIT, amount: depositsTotal, fill: "#55B02E" },
+    { type: TransactionType.EXPENSE, amount: expensesTotal, fill: "#E93030" },
     {
       type: TransactionType.INVESTMENT,
       amount: investmentsTotal,
@@ -59,7 +62,11 @@ const TransactionsPieChart = ({
     },
   ];
   return (
-    <Card className="flex flex-col p-6">
+    <Card className="flex flex-col">
+      <CardHeader className="items-center pb-0">
+        <CardTitle>Pie Chart - Donut</CardTitle>
+        <CardDescription>January - June 2024</CardDescription>
+      </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
@@ -78,24 +85,6 @@ const TransactionsPieChart = ({
             />
           </PieChart>
         </ChartContainer>
-
-        <div className="space-y-3">
-          <PercentageItem
-            icon={<TrendingUpIcon size={16} className="text-primary" />}
-            title="Receita"
-            value={typesPercentage[TransactionType.DEPOSIT]}
-          />
-          <PercentageItem
-            icon={<TrendingDownIcon size={16} className="text-red-500" />}
-            title="Despesas"
-            value={typesPercentage[TransactionType.EXPENSE]}
-          />
-          <PercentageItem
-            icon={<PiggyBankIcon size={16} />}
-            title="Investido"
-            value={typesPercentage[TransactionType.INVESTMENT]}
-          />
-        </div>
       </CardContent>
     </Card>
   );

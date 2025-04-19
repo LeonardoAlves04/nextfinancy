@@ -12,7 +12,6 @@ interface SummaryCards {
   depositsTotal: number;
   investmentsTotal: number;
   expensesTotal: number;
-  userCanAddTransaction?: boolean;
 }
 
 const SummaryCards = async ({
