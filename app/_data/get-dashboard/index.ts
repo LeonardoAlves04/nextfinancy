@@ -6,9 +6,11 @@ import { startOfMonth, endOfMonth } from "date-fns";
 
 export const getDashboard = async (month: string) => {
   const { userId } = await auth();
+
   if (!userId) {
     throw new Error("Unauthorized");
   }
+
   const startDate = new Date(`2024-${month}-01`);
   const endDate = new Date(startDate);
   endDate.setMonth(endDate.getMonth() + 1);
@@ -59,7 +61,7 @@ export const getDashboard = async (month: string) => {
       },
     },
   });
-  console.log("Transações encontradas:", transactions);
+
   const transactionsTotal = Number(
     (
       await db.transaction.aggregate({
@@ -68,6 +70,7 @@ export const getDashboard = async (month: string) => {
       })
     )._sum.amount,
   );
+
   const typesPercentage: TransactionPercentagePerType = {
     [TransactionType.DEPOSIT]: Math.round(
       (Number(depositsTotal || 0) / Number(transactionsTotal)) * 100,
@@ -79,6 +82,7 @@ export const getDashboard = async (month: string) => {
       (Number(investmentsTotal || 0) / Number(transactionsTotal)) * 100,
     ),
   };
+
   const totalExpensePerCategory: TotalExpensePerCategory[] = (
     await db.transaction.groupBy({
       by: ["category"],
@@ -97,6 +101,7 @@ export const getDashboard = async (month: string) => {
       (Number(category._sum.amount) / Number(expensesTotal)) * 100,
     ),
   }));
+
   const lastTransactions = await db.transaction.findMany({
     where,
     orderBy: { date: "desc" },

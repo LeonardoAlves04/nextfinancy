@@ -5,9 +5,9 @@ import SummaryCards from "./_components/summary-cards";
 import TimeSelect from "./_components/time-select";
 import { isMatch } from "date-fns";
 import { getDashboard } from "../_data/get-dashboard";
-import LastTransactions from "./_components/last-transactions";
-import dynamic from "next/dynamic";
 import TransactionsPieChart from "./_components/transactions-pie-chart";
+import LastTransactions from "./_components/last-transactions";
+import ExpensesPerCategory from "./_components/expenses-per-category";
 
 interface HomeProps {
   searchParams: {
@@ -15,23 +15,30 @@ interface HomeProps {
   };
 }
 
-const ExpensesPerCategory = dynamic(
-  () => import("./_components/expenses-per-category"),
-  {
-    ssr: false,
-  },
-);
-
 const Home = async ({ searchParams: { month } }: HomeProps) => {
   const { userId } = await auth();
   if (!userId) {
     redirect("/login");
   }
-  const monthIsInvalid = !month || !isMatch(month, "MM");
+
+  const monthIsInvalid = !month || !isMatch(month, "MM"); // Verifica se o mês é inválido
+
   if (monthIsInvalid) {
-    redirect("?month=01");
+    // Pega o mês atual corretamente
+    const currentMonth = new Date().getMonth() + 1; // O mês vai de 0 a 11, então +1
+    const formattedMonth = String(currentMonth).padStart(2, "0"); // Formata para dois dígitos, ex: "04"
+
+    // Se o parâmetro `month` não for válido, redireciona para o mês atual
+    console.log("Redirecionando para mês:", formattedMonth);
+    redirect(`?month=${formattedMonth}`);
   }
+
   const dashboard = await getDashboard(month);
+
+  const lastTransactions = dashboard.lastTransactions.map((t) => ({
+    ...t,
+    amount: Number(t.amount),
+  }));
   return (
     <>
       <Navbar />
@@ -54,7 +61,7 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
               />
             </div>
           </div>
-          {/* <LastTransactions lastTransactions={}/> */}
+          <LastTransactions lastTransactions={dashboard.lastTransactions} />
         </div>
       </div>
     </>
