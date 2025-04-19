@@ -29,7 +29,7 @@ const chartData = [
 const chartConfig = {
   [TransactionType.INVESTMENT]: {
     label: "Investido",
-    color: "#FFFFFF",
+    color: "#FFD700",
   },
   [TransactionType.DEPOSIT]: {
     label: "Receita",
@@ -58,7 +58,7 @@ const TransactionsPieChart = ({
     {
       type: TransactionType.INVESTMENT,
       amount: investmentsTotal,
-      fill: "#FFFFFF",
+      fill: "#FFD700",
     },
   ];
   return (
