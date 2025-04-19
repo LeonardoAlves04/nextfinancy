@@ -7,7 +7,6 @@ interface SummaryCardProps {
   title: string;
   amount: number;
   size?: "small" | "large";
-  userCanAddTransaction?: boolean;
 }
 
 const SummaryCard = ({

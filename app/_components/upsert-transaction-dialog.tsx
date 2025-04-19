@@ -51,30 +51,36 @@ interface UpsertTransactionDialogProps {
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
-    message: "O nome é obrigatório",
+    message: "O nome é obrigatório.",
   }),
-  amount: z.number({ required_error: "O valor é obrigatório" }).positive({
-    message: "O valor deve ser positivo",
-  }),
+  amount: z
+    .number({
+      required_error: "O valor é obrigatório.",
+    })
+    .positive({
+      message: "O valor deve ser positivo.",
+    }),
   type: z.nativeEnum(TransactionType, {
-    required_error: "O tipo é obrigatório",
+    required_error: "O tipo é obrigatório.",
   }),
   category: z.nativeEnum(TransactionCategory, {
-    required_error: "A categoria é obrigatória",
+    required_error: "A categoria é obrigatória.",
   }),
   paymentMethod: z.nativeEnum(TransactionPaymentMethod, {
-    required_error: "O método de pagamento é obrigatório",
+    required_error: "O método de pagamento é obrigatório.",
   }),
-  date: z.date({ required_error: "A data é obrigatória" }),
+  date: z.date({
+    required_error: "A data é obrigatória.",
+  }),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
 
-const UpsertTransactionDialogProps = ({
+const UpsertTransactionDialog = ({
   isOpen,
-  setIsOpen,
   defaultValues,
   transactionId,
+  setIsOpen,
 }: UpsertTransactionDialogProps) => {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -116,8 +122,9 @@ const UpsertTransactionDialogProps = ({
           <DialogTitle>
             {isUpdate ? "Atualizar" : "Criar"} transação
           </DialogTitle>
-          <DialogDescription>Insira as informações abaixo:</DialogDescription>
+          <DialogDescription>Insira as informações abaixo</DialogDescription>
         </DialogHeader>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
@@ -127,9 +134,8 @@ const UpsertTransactionDialogProps = ({
                 <FormItem>
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
-                    <Input placeholder="Digite o nome" {...field} />
+                    <Input placeholder="Digite o nome..." {...field} />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -142,7 +148,7 @@ const UpsertTransactionDialogProps = ({
                   <FormLabel>Valor</FormLabel>
                   <FormControl>
                     <MoneyInput
-                      placeholder="Digite o valor"
+                      placeholder="Digite o valor..."
                       value={field.value}
                       onValueChange={({ floatValue }) =>
                         field.onChange(floatValue)
@@ -151,12 +157,10 @@ const UpsertTransactionDialogProps = ({
                       disabled={field.disabled}
                     />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="type"
@@ -169,7 +173,7 @@ const UpsertTransactionDialogProps = ({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Selecione o tipo da transação" />
+                        <SelectValue placeholder="Select a verified email to display" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -184,7 +188,6 @@ const UpsertTransactionDialogProps = ({
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="category"
@@ -197,7 +200,7 @@ const UpsertTransactionDialogProps = ({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Selecione a categoria " />
+                        <SelectValue placeholder="Selecione a categoria..." />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -212,7 +215,6 @@ const UpsertTransactionDialogProps = ({
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="paymentMethod"
@@ -225,7 +227,7 @@ const UpsertTransactionDialogProps = ({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Selecione um método de pagamento " />
+                        <SelectValue placeholder="Selecione um método de pagamento..." />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -240,7 +242,6 @@ const UpsertTransactionDialogProps = ({
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="date"
@@ -252,7 +253,6 @@ const UpsertTransactionDialogProps = ({
                 </FormItem>
               )}
             />
-
             <DialogFooter>
               <DialogClose asChild>
                 <Button type="button" variant="outline">
@@ -270,4 +270,4 @@ const UpsertTransactionDialogProps = ({
   );
 };
 
-export default UpsertTransactionDialogProps;
+export default UpsertTransactionDialog;

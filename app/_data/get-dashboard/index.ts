@@ -2,23 +2,22 @@ import { db } from "@/app/_lib/prisma";
 import { TransactionType } from "@prisma/client";
 import { TotalExpensePerCategory, TransactionPercentagePerType } from "./types";
 import { auth } from "@clerk/nextjs/server";
-import { format, startOfMonth, endOfMonth } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { startOfMonth, endOfMonth } from "date-fns";
 
 export const getDashboard = async (month: string) => {
   const { userId } = await auth();
   if (!userId) {
     throw new Error("Unauthorized");
   }
-
-  const start = startOfMonth(new Date(`2024-${month}-01`));
-  const end = endOfMonth(start);
-
+  const startDate = new Date(`2024-${month}-01`);
+  const endDate = new Date(startDate);
+  endDate.setMonth(endDate.getMonth() + 1);
+  const currentDate = new Date();
   const where = {
     userId,
     date: {
-      gte: start,
-      lt: end,
+      gte: startOfMonth(currentDate), // Primeiro dia do mês atual
+      lt: endOfMonth(currentDate), // Último dia do mês atual
     },
   };
 
@@ -28,7 +27,7 @@ export const getDashboard = async (month: string) => {
         where: { ...where, type: "DEPOSIT" },
         _sum: { amount: true },
       })
-    )?._sum?.amount,
+    )?._sum?.amount || 0,
   );
 
   const investmentsTotal = Number(
@@ -37,7 +36,7 @@ export const getDashboard = async (month: string) => {
         where: { ...where, type: "INVESTMENT" },
         _sum: { amount: true },
       })
-    )?._sum?.amount,
+    )?._sum?.amount || 0,
   );
 
   const expensesTotal = Number(
@@ -46,11 +45,21 @@ export const getDashboard = async (month: string) => {
         where: { ...where, type: "EXPENSE" },
         _sum: { amount: true },
       })
-    )?._sum?.amount,
+    )?._sum?.amount || 0,
   );
 
   const balance = depositsTotal - investmentsTotal - expensesTotal;
 
+  const transactions = await db.transaction.findMany({
+    where: {
+      userId,
+      date: {
+        gte: new Date(`2024-${month}-01`),
+        lt: new Date(`2024-${month}-31`),
+      },
+    },
+  });
+  console.log("Transações encontradas:", transactions);
   const transactionsTotal = Number(
     (
       await db.transaction.aggregate({
@@ -59,7 +68,6 @@ export const getDashboard = async (month: string) => {
       })
     )._sum.amount,
   );
-
   const typesPercentage: TransactionPercentagePerType = {
     [TransactionType.DEPOSIT]: Math.round(
       (Number(depositsTotal || 0) / Number(transactionsTotal)) * 100,
@@ -71,7 +79,6 @@ export const getDashboard = async (month: string) => {
       (Number(investmentsTotal || 0) / Number(transactionsTotal)) * 100,
     ),
   };
-
   const totalExpensePerCategory: TotalExpensePerCategory[] = (
     await db.transaction.groupBy({
       by: ["category"],
@@ -90,22 +97,15 @@ export const getDashboard = async (month: string) => {
       (Number(category._sum.amount) / Number(expensesTotal)) * 100,
     ),
   }));
-
-  const lastTransactionsRaw = await db.transaction.findMany({
+  const lastTransactions = await db.transaction.findMany({
     where,
     orderBy: { date: "desc" },
     take: 15,
   });
 
-  const lastTransactions = lastTransactionsRaw.map((transaction) => ({
-    ...transaction,
-    formattedDate: format(
-      new Date(transaction.date),
-      "dd 'de' MMMM 'de' yyyy",
-      {
-        locale: ptBR,
-      },
-    ),
+  const formatted = lastTransactions.map((tx) => ({
+    ...tx,
+    amount: Number(tx.amount),
   }));
 
   return {
@@ -115,6 +115,6 @@ export const getDashboard = async (month: string) => {
     expensesTotal,
     typesPercentage,
     totalExpensePerCategory,
-    lastTransactions,
+    lastTransactions: formatted,
   };
 };

@@ -46,17 +46,15 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
         <div className="grid h-full grid-cols-[2fr,1fr] gap-6 overflow-hidden">
           <div className="flex flex-col gap-6 overflow-hidden">
             <SummaryCards month={month} {...dashboard} />
-            {dashboard?.totalExpensePerCategory &&
-              dashboard?.depositsTotal !== undefined && (
-                <div className="grid h-full grid-cols-3 grid-rows-1 gap-6 overflow-hidden">
-                  <TransactionsPieChart {...dashboard} />
-                  <ExpensesPerCategory
-                    expensesPerCategory={dashboard.totalExpensePerCategory}
-                  />
-                </div>
-              )}
+
+            <div className="grid h-full grid-cols-3 grid-rows-1 gap-6 overflow-hidden">
+              <TransactionsPieChart {...dashboard} />
+              <ExpensesPerCategory
+                expensesPerCategory={dashboard.totalExpensePerCategory}
+              />
+            </div>
           </div>
-          <LastTransactions lastTransactions={dashboard.lastTransactions} />
+          {/* <LastTransactions lastTransactions={}/> */}
         </div>
       </div>
     </>
