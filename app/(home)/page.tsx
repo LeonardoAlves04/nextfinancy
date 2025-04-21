@@ -29,16 +29,11 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
     const formattedMonth = String(currentMonth).padStart(2, "0"); // Formata para dois dígitos, ex: "04"
 
     // Se o parâmetro `month` não for válido, redireciona para o mês atual
-    console.log("Redirecionando para mês:", formattedMonth);
     redirect(`?month=${formattedMonth}`);
   }
 
   const dashboard = await getDashboard(month);
 
-  const lastTransactions = dashboard.lastTransactions.map((t) => ({
-    ...t,
-    amount: Number(t.amount),
-  }));
   return (
     <>
       <Navbar />
@@ -49,11 +44,9 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
             <TimeSelect />
           </div>
         </div>
-
         <div className="grid h-full grid-cols-[2fr,1fr] gap-6 overflow-hidden">
           <div className="flex flex-col gap-6 overflow-hidden">
             <SummaryCards month={month} {...dashboard} />
-
             <div className="grid h-full grid-cols-3 grid-rows-1 gap-6 overflow-hidden">
               <TransactionsPieChart {...dashboard} />
               <ExpensesPerCategory
