@@ -3,16 +3,21 @@ import { CardContent, CardHeader, CardTitle } from "@/app/_components/ui/card";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { TRANSACTION_PAYMENT_METHOD_ICONS } from "@/app/_constants/transactions";
 import { formatCurrency } from "@/app/_utils/currency";
-import { Transaction, TransactionType } from "@prisma/client";
+import { TransactionType, Transaction } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 
+// Corrigindo a tipagem do amount para number
+type TransactionWithNumberAmount = Omit<Transaction, "amount"> & {
+  amount: number;
+};
+
 interface LastTransactionsProps {
-  lastTransactions: Transaction[];
+  lastTransactions: TransactionWithNumberAmount[];
 }
 
 const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
-  const getAmountColor = (transaction: Transaction) => {
+  const getAmountColor = (transaction: TransactionWithNumberAmount) => {
     if (transaction.type === TransactionType.EXPENSE) {
       return "text-red-500";
     }
@@ -21,12 +26,14 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
     }
     return "text-yellow-400";
   };
-  const getAmountPrefix = (transaction: Transaction) => {
+
+  const getAmountPrefix = (transaction: TransactionWithNumberAmount) => {
     if (transaction.type === TransactionType.DEPOSIT) {
       return "+";
     }
     return "-";
   };
+
   return (
     <ScrollArea className="rounded-md border">
       <CardHeader className="flex-row items-center justify-between">
@@ -63,7 +70,7 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
             </div>
             <p className={`text-sm font-bold ${getAmountColor(transaction)}`}>
               {getAmountPrefix(transaction)}
-              {formatCurrency(transaction.amount.toNumber())}
+              {formatCurrency(transaction.amount)}
             </p>
           </div>
         ))}
