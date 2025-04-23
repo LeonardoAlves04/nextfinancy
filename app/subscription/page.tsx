@@ -62,9 +62,6 @@ const SubscriptionPage = async () => {
                 <CheckIcon className="text-primary" />
                 <p>Relatórios com IA</p>
               </div>
-              <Button className="w-full rounded-full font-bold">
-                Adquirir plano
-              </Button>
               <AcquirePlanButton />
             </CardContent>
           </Card>
