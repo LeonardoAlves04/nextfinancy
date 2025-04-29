@@ -3,11 +3,9 @@
 import { Button } from "@/app/_components/ui/button";
 import { loadStripe } from "@stripe/stripe-js";
 import { useUser } from "@clerk/nextjs";
-import Link from "next/link";
 import { createStripeCheckout } from "../actions/create-checkout";
 
 const AcquirePlanButton = () => {
-  const { user } = useUser();
   const handleAcquirePlanClick = async () => {
     const { sessionId } = await createStripeCheckout();
     if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {

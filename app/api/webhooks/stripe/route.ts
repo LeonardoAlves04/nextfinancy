@@ -1,4 +1,4 @@
-import { clerkClient } from "@clerk/nextjs/server";
+import clerkClient, { Clerk } from "@clerk/clerk-sdk-node";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -29,7 +29,7 @@ export const POST = async (request: Request) => {
       if (!clerkUserId) {
         return NextResponse.error();
       }
-      (await clerkClient()).users.updateUser(clerkUserId, {
+      await clerkClient.users.updateUser(clerkUserId, {
         privateMetadata: {
           stripeCustomerId: customer,
           stripeSubscriptionId: subscription,
@@ -49,7 +49,7 @@ export const POST = async (request: Request) => {
       if (!clerkUserId) {
         return NextResponse.error();
       }
-      (await clerkClient()).users.updateUser(clerkUserId, {
+      await clerkClient.users.updateUser(clerkUserId, {
         privateMetadata: {
           stripeCustomerId: null,
           stripeSubscriptionId: null,
