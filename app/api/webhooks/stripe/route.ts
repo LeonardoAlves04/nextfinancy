@@ -58,6 +58,7 @@ export const POST = async (request: Request) => {
           subscriptionPlan: null,
         },
       });
+      break;
     }
   }
   return NextResponse.json({ received: true });
