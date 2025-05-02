@@ -6,6 +6,7 @@ import { CheckIcon, XIcon } from "lucide-react";
 import AcquirePlanButton from "./_components/acquire-plan-button";
 import clerkClient from "@clerk/clerk-sdk-node";
 import { Badge } from "../_components/ui/badge";
+import { getCurrentMonthTransactions } from "../_data/get-current-month-transactions";
 
 const SubscriptionPage = async () => {
   const { userId } = await auth();
@@ -15,6 +16,7 @@ const SubscriptionPage = async () => {
 
   const user = await clerkClient.users.getUser(userId);
   const hasPremiumPlan = user.publicMetadata.subscriptionPlan === "premium";
+  const currentMonthTransactions = await getCurrentMonthTransactions();
 
   return (
     <>
@@ -37,7 +39,9 @@ const SubscriptionPage = async () => {
             <CardContent className="space-y-8 py-8">
               <div className="flex items-center gap-3">
                 <CheckIcon className="text-primary" />
-                <p>Apenas 10 transações por mês (7/10)</p>
+                <p>
+                  Apenas 10 transações por mês ({currentMonthTransactions}/10)
+                </p>
               </div>
               <div className="flex items-center gap-2">
                 <XIcon />
