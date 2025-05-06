@@ -11,6 +11,7 @@ import {
   TRANSACTION_TYPE_OPTIONS,
 } from "@/app/_constants/transactions";
 import EditTransactionButton from "../_components/edit-transaction-button";
+import DeleteTransactionButton from "../_components/delete-transaction-button";
 
 export const transactionColumns: ColumnDef<Transaction>[] = [
   {
@@ -62,9 +63,7 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
       return (
         <div className="space-x-1">
           <EditTransactionButton transaction={transaction} />
-          <Button variant="ghost" size="icon" className="text-muted-foreground">
-            <TrashIcon size={16} />
-          </Button>
+          <DeleteTransactionButton transactionId={transaction.id} />
         </div>
       );
     },
