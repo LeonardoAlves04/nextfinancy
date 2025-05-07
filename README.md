@@ -38,7 +38,7 @@ Um aplicativo de gestão financeira, no qual você pode autenticar com sua conta
 
 ## Deploy da Aplicação :dash:
 
-Deploy: [https://nextfinancy.vercel.app/]
+Deploy: https://nextfinancy.vercel.app/
 
 ## Linguagens e libs utilizadas :books:
 
